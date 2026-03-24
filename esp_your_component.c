@@ -21,6 +21,12 @@ static void unregister_at_commands(void);
 static void handle_at_your_query(const char *param);
 static void handle_at_your(const char *param);
 
+/**
+ * @brief Trim leading and trailing whitespace in-place.
+ *
+ * @param s Mutable string buffer.
+ * @return Pointer to the trimmed string or NULL if @p s is NULL.
+ */
 static char *trim_ws(char *s)
 {
     if (s == NULL) return NULL;
@@ -33,6 +39,13 @@ static char *trim_ws(char *s)
     return s;
 }
 
+/**
+ * @brief Compare two strings case-insensitively.
+ *
+ * @param a First string.
+ * @param b Second string.
+ * @return true if both strings are equal ignoring ASCII case.
+ */
 static bool ci_equals(const char *a, const char *b)
 {
     if (a == NULL || b == NULL) return false;
@@ -140,8 +153,10 @@ static void unregister_at_commands(void)
 static void handle_at_your_query(const char *param)
 {
     (void)param;
-    AT(C "YOUR COMPONENT:");
-    AT(C "  init : %s", s_initialized ? "TRUE" : "FALSE");
+    AT(C "Your component:");
+    AT(C "  state : %s", s_initialized ? "initialized" : "not initialized");
+    AT(C "  at    : %s", s_at_enabled ? "enabled" : "disabled");
+    AT(C "  log   : %s", s_log_enabled ? "enabled" : "disabled");
     AT(C "Usage:");
     AT(C "  AT+YOUR=CFG");
     AT(C "  AT+YOUR=DO,<arg1>,<arg2>");

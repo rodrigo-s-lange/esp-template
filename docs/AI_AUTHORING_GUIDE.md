@@ -15,9 +15,12 @@ You must turn placeholders into a coherent component that obeys the framework ru
 - do not expose backend internals without a strong reason
 - keep dependencies minimal
 - use readable diagnostics
+- add Doxygen to every public API before considering the component finished
 - implement symmetric init/deinit behavior
 - do not invent runtime integration if the lifecycle is not ready
 - do not invent `esp_pins` integration if the component owns no GPIOs
+- classify the component correctly as base or device
+- keep examples aligned with `ESP_INIT_*` and `AT+ESP=<MODULE>,ENABLE[,AT][,LOG]`
 
 ## Do not do this
 

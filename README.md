@@ -6,10 +6,13 @@ Its purpose is not to provide a working feature by itself.
 Its purpose is to guide humans and AI tools toward creating new components that:
 
 - follow the framework lifecycle contract
+- use the `ESP_INIT_*` flags model consistently
 - use resources explicitly
 - expose readable diagnostics
 - integrate cleanly with `esp_runtime` only when ready
 - integrate with `esp_pins` only when they actually own GPIOs
+- distinguish correctly between base components and device components
+- document public APIs with Doxygen from the start
 - stay publishable as independent repositories
 
 ## What this template includes
@@ -57,6 +60,7 @@ Do not publish a repository with these placeholders still present.
 ## Hard rules
 
 - English only in code, comments, logs, AT output, and docs.
+- Public headers must use Doxygen for every public type and function.
 - No `ESP_ERROR_CHECK()` for expected runtime failures inside reusable components.
 - `deinit()` must release everything allocated by `init()`.
 - If AT commands are registered, they must be unregistered in `deinit()`.
@@ -65,6 +69,31 @@ Do not publish a repository with these placeholders still present.
 - If a component cannot be enabled and disabled cleanly, do not put it in `esp_runtime` yet.
 - Public headers must describe capability, not backend implementation details.
 - Keep dependencies minimal.
+
+## Framework alignment
+
+Every new component created from this template must reflect the current framework contract:
+
+- init uses `ESP_INIT_NONE`, `ESP_INIT_AT`, and `ESP_INIT_LOG`
+- runtime enable examples use `AT+ESP=<MODULE>,ENABLE[,AT][,LOG]`
+- status and help output must be human-readable
+- `esp_runtime` integration is optional and must be justified
+- `esp_pins` integration is optional and must be justified
+- base components and device components must not be modeled the same way
+
+## Base vs device components
+
+Use the right category before writing code.
+
+- Base component:
+  - exposes generic transport, bus, protocol, or infrastructure behavior
+  - examples: I2C master, SPI master, RS485, scheduler, storage
+  - should help prototype unknown hardware or workflows
+- Device component:
+  - depends on one or more base components
+  - models a specific IC, module, or device behavior
+  - examples: SI7021, BMP280, PCA9685
+  - should not re-implement bus ownership if the base component already handles it
 
 ## Recommended release flow
 

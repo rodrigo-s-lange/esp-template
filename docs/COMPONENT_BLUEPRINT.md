@@ -14,6 +14,24 @@ Choose one category first:
 
 Do not mix categories casually.
 
+### Base bus/protocol component
+
+Typical traits:
+
+- generic commands and APIs
+- useful for bring-up and prototyping
+- can serve multiple future device components
+- examples: I2C master, SPI master, RS485, CAN, scheduler
+
+### Device driver component
+
+Typical traits:
+
+- targets one IC or one device family
+- depends on a base component when applicable
+- exposes domain behavior, not raw transport only
+- examples: SI7021, BMP280, PCA9685
+
 ## 2. Decide whether it belongs in `esp_runtime`
 
 Add runtime integration only if all are true:
@@ -58,6 +76,7 @@ At minimum:
 
 - purpose
 - lifecycle
+- whether this is a base component or a device component
 - config defaults if any
 - AT commands if any
 - realistic examples
